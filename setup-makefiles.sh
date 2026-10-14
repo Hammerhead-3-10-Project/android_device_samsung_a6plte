@@ -6,31 +6,8 @@
 
 set -e
 
-INITIAL_COPYRIGHT_YEAR=2026
+export DEVICE=a6plte
+export DEVICE_COMMON=msm8953-common
+export VENDOR=samsung
 
-DEVICE=a6plte
-VENDOR=samsung
-
-# Load extract_utils and do some sanity checks
-MY_DIR="${BASH_SOURCE%/*}"
-if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
-
-LINEAGE_ROOT="${MY_DIR}"/../../..
-
-HELPER="${LINEAGE_ROOT}/vendor/lineage/build/tools/extract_utils.sh"
-if [ ! -f "${HELPER}" ]; then
-    echo "Unable to find helper script at ${HELPER}"
-    exit 1
-fi
-source "${HELPER}"
-
-# Initialize the helper
-setup_vendor "${DEVICE}" "${VENDOR}" "${LINEAGE_ROOT}"
-
-# Warning headers and guards
-write_headers
-
-write_makefiles "${MY_DIR}/proprietary-files.txt" true
-
-# Finish
-write_footers
+"./../../${VENDOR}/${DEVICE_COMMON}/setup-makefiles.sh" "$@"

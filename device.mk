@@ -5,10 +5,8 @@
 
 LOCAL_PATH := device/samsung/a6plte
 
-# Soong namespaces
-PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH) \
-    hardware/samsung
+# Soong namespace
+PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -19,13 +17,5 @@ TARGET_SCREEN_WIDTH := 1080
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-
-# Samsung hardware (hardware/samsung from the Lineage manifest)
-PRODUCT_PACKAGES += \
-    SamsungServiceMode
-
-# Vendor-side HALs already shipped by the stock vendor partition are NOT rebuilt here.
-# Keep the build time low: this is a system-only device tree for now.
-
-# Inherit the proprietary files (system-side Samsung/Qualcomm libs required by the stock vendor)
-$(call inherit-product, vendor/samsung/a6plte/a6plte-vendor.mk)
+# Common Samsung msm8953 configuration (Treble, hardware/samsung, proprietary system libs)
+$(call inherit-product, device/samsung/msm8953-common/msm8953.mk)

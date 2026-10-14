@@ -17,9 +17,11 @@ The stock partitions `vendor` (Android 10, VNDK 29), `odm`, `boot` and the bootl
 - Boot header: base 0x80000000, kernel 0x8000, ramdisk 0x2000000, tags 0x1e00000, header v0, pagesize 2048.
 - `manifest.xml` and `compatibility_matrix.xml` are the **stock vendor** ones (`target-level` 2): the build-time VINTF
   check must see what the vendor really provides.
-- `proprietary-files.txt`: only the 25 Samsung/Qualcomm libraries that stock `/system` has and the stock vendor binaries
-  need (found with `readelf` DT_NEEDED minus vendor/VNDK/LLNDK/AOSP). Extract them with
-  `./extract-files.sh /home/fenixdev/Scrivania/progetto/firmware/extracted` (system-as-root dump).
+- The platform part lives in `device/samsung/msm8953-common` (board config, product config, shared properties and the
+  `proprietary-files.txt` with the 25 Samsung/Qualcomm system libraries the stock vendor needs, found with `readelf`
+  DT_NEEDED minus vendor/VNDK/LLNDK/AOSP). This tree only has what is specific to the A605FN. Extract the blobs with
+  `./extract-files.sh /home/fenixdev/Scrivania/progetto/firmware/extracted` (it calls the common script; system-as-root dump).
+  A device specific `proprietary-files.txt` can be added here later (it is picked up automatically).
 - Lineage 17.1 maps `msm8953` to `QCOM_HARDWARE_VARIANT := msm8996` (`hardware/qcom-caf/msm8996/{audio,display,media}`).
 
 ## Known risks / TODO
