@@ -11,18 +11,18 @@ DEVICE_PATH := device/samsung/a6plte
 
 include device/samsung/msm8953-common/BoardConfigCommon.mk
 
-# Kernel: the stock Image.gz-dtb (arm64 Image + 5 appended dtb) until the kernel is built from source.
-# prebuilt/Image.gz-dtb is the stock kernel with ",verify" removed from fsmgr_flags of system/vendor/odm in the
-# 5 dtbs (nothing else changed): the boot image built from it has dm-verity disabled, which is needed because
-# system, vendor and odm are modified.
+# Kernel built from the Samsung opensource tree (kernel/samsung/a6plte, branch lineage-17.1 of the local repo):
+# stock defconfig + EUR_OPEN machine, dm-verity dropped from the fstab nodes of the dts, ZRAM enabled.
+# arm64 kernel, 32-bit userspace (TARGET_ARCH := arm) with a 64-bit binder.
 BOARD_MKBOOTIMG_ARGS += --board SRPQL20D008KU
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
-# Step 2 (kernel from source, branch lineage-17.1 of the Samsung opensource tree):
-# TARGET_KERNEL_SOURCE := kernel/samsung/a6plte
-# TARGET_KERNEL_CONFIG := a6plte_sea_open_defconfig
-# TARGET_KERNEL_ARCH := arm64
-# TARGET_KERNEL_HEADER_ARCH := arm64
-# TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_KERNEL_SOURCE := kernel/samsung/a6plte
+TARGET_KERNEL_CONFIG := a6plte_sea_open_defconfig
+TARGET_KERNEL_ARCH := arm64
+BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
+# The Android gcc 4.9 predefines __ANDROID__, which the Samsung kernel sources do not expect (README_Kernel.txt)
+TARGET_KERNEL_ADDITIONAL_FLAGS := KCFLAGS=-mno-android
+# Fallback: the stock Image.gz-dtb with ",verify" removed from the dtbs (uncomment and drop the lines above)
+# TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 
 # OTA zip: refuse other devices and add the vendor fstab step (releasetools.py + install/patch_vendor.sh)
 TARGET_OTA_ASSERT_DEVICE := a6plte
