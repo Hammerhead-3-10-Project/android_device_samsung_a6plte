@@ -35,7 +35,7 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 33554432
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3313500160
 BOARD_VENDORIMAGE_PARTITION_SIZE := 503316480
-BOARD_ODMIMAGE_PARTITION_SIZE := 377487360
+# odm (377487360 B) is not built or flashed: it is the CSC partition of the user's firmware
 BOARD_CACHEIMAGE_PARTITION_SIZE := 314572800
 
 # VINTF: the manifest/matrix of the stock vendor (target-level 2) so the build-time check sees what the vendor provides
