@@ -32,3 +32,23 @@ The stock partitions `vendor` (Android 10, VNDK 29), `odm`, `boot` and the bootl
 - `rootdir/etc/fstab.qcom` is a copy of the stock vendor fstab, used for the recovery fstab placeholder only.
 - The stock boot keeps `dm-verity` disabled in the device tree; keep it that way (Lineage system is not verity-signed).
 - sepolicy dir is empty: expect AVC denials to fix after the first boot (`adb logcat | grep avc`).
+
+## Installation (SM-A605FN, stock firmware A605FNXXU8CVA1, bootloader unlocked)
+
+The ROM is "system-only": vendor, modem and bootloader stay the stock Samsung ones, so the phone must be on that
+firmware (Android 10) before flashing. **All data is lost** (the stock userdata is Samsung FDE, Lineage cannot read it).
+
+1. Flash the TWRP 9.0 for a6plte in Download mode (`heimdall flash --RECOVERY twrp.img --no-reboot`, or Odin/AP).
+   Boot it with Vol Up + Power right after (do not let the phone boot Android first, it would restore the stock recovery).
+2. In TWRP: **Wipe -> Format Data -> yes**.
+3. **Install** the ROM zip. It flashes `system` and a boot image with **dm-verity disabled** (the stock kernel with
+   `verify` removed from the dtbs) and, from the recovery, switches the vendor fstab from `forceencrypt` to
+   `encryptable` (otherwise the first boot never completes, see `install/patch_vendor.sh`).
+4. Reboot system. The first boot takes a few minutes.
+
+The same dm-verity-free boot image is also published on its own (`a6plte-boot-noverity.img`, built as `boot.img`):
+TWRP -> Install -> Install Image -> Boot, or `heimdall flash --BOOT`. dm-verity must be off whenever `system`,
+`vendor` or `odm` are modified, TWRP included: TWRP mounts them read-write and the next stock boot panics with
+`dmv corrupt`.
+
+Not possible / not done: re-locking the bootloader, Knox (warranty bit is tripped for good), encryption of /data.
