@@ -17,5 +17,8 @@ TARGET_SCREEN_WIDTH := 1080
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
+# The vendor partition: files, links, SELinux policy and properties of the stock vendor
+$(call inherit-product, vendor/samsung/a6plte/a6plte-vendor.mk)
+
 # Common Samsung msm8953 configuration (Treble, hardware/samsung, proprietary system libs)
 $(call inherit-product, device/samsung/msm8953-common/msm8953.mk)

@@ -24,9 +24,11 @@ TARGET_KERNEL_ADDITIONAL_FLAGS := KCFLAGS=-mno-android
 # Fallback: the stock Image.gz-dtb with ",verify" removed from the dtbs (uncomment and drop the lines above)
 # TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 
-# OTA zip: refuse other devices and add the vendor fstab step (releasetools.py + install/patch_vendor.sh)
+# OTA zip: refuse other devices
 TARGET_OTA_ASSERT_DEVICE := a6plte
-TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
+
+# The vendor partition is built from the files of vendor/samsung/a6plte (stock vendor of A605FNXXU8CVA1)
+include vendor/samsung/a6plte/BoardConfigVendor.mk
 
 # Partitions (A605FN PIT)
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
