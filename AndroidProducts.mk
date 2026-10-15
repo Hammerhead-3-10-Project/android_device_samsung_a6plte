@@ -1,12 +1,12 @@
 #
-# Copyright (C) 2026 The LineageOS Project
+# Copyright (C) 2026 The PixelExperience Project
 # SPDX-License-Identifier: Apache-2.0
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_a6plte.mk
+    $(LOCAL_DIR)/aosp_a6plte.mk
 
 COMMON_LUNCH_CHOICES := \
-    lineage_a6plte-user \
-    lineage_a6plte-userdebug \
-    lineage_a6plte-eng
+    aosp_a6plte-user \
+    aosp_a6plte-userdebug \
+    aosp_a6plte-eng
