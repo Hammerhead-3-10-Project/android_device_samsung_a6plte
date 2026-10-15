@@ -6,6 +6,9 @@
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
+# Built-in GApps of Pixel Experience: the userspace of this phone is 32 bit (armeabi-v7a only)
+TARGET_GAPPS_ARCH := arm
+
 # Inherit some common Pixel Experience stuff.
 $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
