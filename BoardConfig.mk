@@ -49,7 +49,7 @@ TARGET_SCREEN_DENSITY := 420
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # Recovery (the stock recovery partition is replaced by TWRP, see AGENTS.md)
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/recovery.fstab
 
 # SELinux
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy

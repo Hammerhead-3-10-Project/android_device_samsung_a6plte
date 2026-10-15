@@ -1,0 +1,15 @@
+# Recovery fstab of the Galaxy A6+ (SM-A605FN). Not installed on the device: the build reads it to know the block
+# devices the OTA zip writes (system, vendor, boot) and what the updater mounts. The runtime fstab is the vendor's
+# (vendor/samsung/a6plte, etc/fstab.qcom).
+#
+# system-as-root: the system partition is mounted as "/" (the OTA tools reject a "/system" entry).
+
+#<src>                                      <mnt_point>   <type>  <mnt_flags and options>                    <fs_mgr_flags>
+/dev/block/bootdevice/by-name/system        /             ext4    ro,barrier=1,discard                       wait
+/dev/block/bootdevice/by-name/vendor        /vendor       ext4    ro,barrier=1,discard                       wait
+/dev/block/bootdevice/by-name/boot          /boot         emmc    defaults                                   defaults
+/dev/block/bootdevice/by-name/recovery      /recovery     emmc    defaults                                   defaults
+/dev/block/bootdevice/by-name/misc          /misc         emmc    defaults                                   defaults
+/dev/block/bootdevice/by-name/cache         /cache        ext4    noatime,nosuid,nodev,barrier=1             wait
+/dev/block/bootdevice/by-name/userdata      /data         ext4    noatime,nosuid,nodev,barrier=1,data=ordered wait
+/dev/block/bootdevice/by-name/persist       /persist      ext4    noatime,nosuid,nodev,barrier=1             wait
