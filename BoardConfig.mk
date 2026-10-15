@@ -11,7 +11,10 @@ DEVICE_PATH := device/samsung/a6plte
 
 include device/samsung/msm8953-common/BoardConfigCommon.mk
 
-# Kernel: the stock Image.gz-dtb (arm64 Image + 5 appended dtb) until the kernel is built from source
+# Kernel: the stock Image.gz-dtb (arm64 Image + 5 appended dtb) until the kernel is built from source.
+# prebuilt/Image.gz-dtb is the stock kernel with ",verify" removed from fsmgr_flags of system/vendor/odm in the
+# 5 dtbs (nothing else changed): the boot image built from it has dm-verity disabled, which is needed because
+# system, vendor and odm are modified.
 BOARD_MKBOOTIMG_ARGS += --board SRPQL20D008KU
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 # Step 2 (kernel from source, branch lineage-17.1 of the Samsung opensource tree):
@@ -20,6 +23,10 @@ TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 # TARGET_KERNEL_ARCH := arm64
 # TARGET_KERNEL_HEADER_ARCH := arm64
 # TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+
+# OTA zip: refuse other devices and add the vendor fstab step (releasetools.py + install/patch_vendor.sh)
+TARGET_OTA_ASSERT_DEVICE := a6plte
+TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 
 # Partitions (A605FN PIT)
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
