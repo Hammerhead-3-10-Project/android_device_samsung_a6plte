@@ -1,5 +1,11 @@
 # LineageOS 17.1 device tree — Samsung Galaxy A6+ (SM-A605FN, `a6plte`)
 
+## ARM64 migration target (2026-10-18)
+
+The agreed target is native ARM64 Android with ARM32 compatibility for indispensable stock services.
+See [ARM64_MIGRATION.md](ARM64_MIGRATION.md) for verified blockers, donor candidates and the migration order.
+The current tested product below remains ARM32 until the ARM64 graphics dependencies are resolved.
+
 ## Current `pe-ten` branch (2026-10-18)
 
 This branch builds Pixel Experience 10 with a 32-bit userspace and an ARM64 kernel.
