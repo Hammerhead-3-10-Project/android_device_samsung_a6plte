@@ -12,7 +12,7 @@ DEVICE_PATH := device/samsung/a6plte
 include device/samsung/msm8953-common/BoardConfigCommon.mk
 
 # Kernel built from source; select a matching config/toolchain for the checked-out sources.
-# arm64 kernel, 32-bit userspace (TARGET_ARCH := arm) with a 64-bit binder.
+# ARM64 kernel/userspace with an ARM32 secondary ABI and a 64-bit binder.
 BOARD_MKBOOTIMG_ARGS += --board SRPQL20D008KU
 TARGET_KERNEL_SOURCE := kernel/samsung/a6plte
 TARGET_KERNEL_ARCH := arm64

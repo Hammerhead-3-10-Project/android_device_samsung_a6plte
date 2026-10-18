@@ -10,6 +10,12 @@ services must not be removed merely because their executable is 32-bit.
 The current `pe-ten` product remains the tested ARM32 baseline. This document records the migration;
 it does not change the architecture of that product or make the current vendor suitable for ARM64.
 
+## Implementation status
+
+The `pe-ten-arm64` branches now implement the initial runtime/graphics/media configuration.
+See [ARM64_STATUS.md](ARM64_STATUS.md) for the actual build/check results; the baseline and initial
+plan below are retained as design context.
+
 ## Verified baseline
 
 - Kernel: 4.9.319, source commit `189707d91ee5867f226505aac11632f3dd9c1ede`, ARM64 and CONFIG_COMPAT=y.

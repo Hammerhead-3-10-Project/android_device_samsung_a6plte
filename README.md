@@ -1,3 +1,12 @@
+# Pixel Experience 10 ARM64 — Samsung Galaxy A6+
+
+This `pe-ten-arm64` branch enables native ARM64 Android with ARM32 compatibility.
+See [ARM64_STATUS.md](ARM64_STATUS.md) for implemented changes, verified checks and the isolated build command.
+The original `pe-ten` branch remains the tested ARM32 baseline. No ARM64 device boot has been validated.
+
+The older bring-up and installation notes below describe the ARM32 baseline, not an installation procedure
+for this experimental branch.
+
 # LineageOS 17.1 device tree — Samsung Galaxy A6+ (SM-A605FN, `a6plte`)
 
 ## ARM64 migration target (2026-10-18)

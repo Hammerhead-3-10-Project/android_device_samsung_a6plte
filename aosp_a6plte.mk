@@ -3,11 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Select both app ABIs before core_minimal chooses the default zygote.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Built-in GApps of Pixel Experience: the userspace of this phone is 32 bit (armeabi-v7a only)
-TARGET_GAPPS_ARCH := arm
+# Native ARM64 GApps; ARM32 runtime remains available for stock services.
+TARGET_GAPPS_ARCH := arm64
 
 # Inherit some common Pixel Experience stuff.
 $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
