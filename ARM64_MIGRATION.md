@@ -80,6 +80,25 @@ A20s GSL. Display/metadata, mapper, codecs, perf and thermal have separate depen
 are not selected by the GPU manifest. See vendor `donors/README.md` for the detailed findings,
 including the SDM LIBC_R map mismatch and why an export-map mismatch alone is not a complete linker test.
 
+## Remaining subsystem choices (2026-10-18)
+
+An A20s lib64 filename establishes availability, not compatibility. The additional tree inventory
+is in project report `a20s-additional-subsystems.json`; these groups have not had the GPU/media ELF audit.
+
+| Subsystem | Preferred first ARM64 approach | Donor checks before replacement |
+|---|---|---|
+| ION, tinyalsa/tinycompress and common runtime libraries | Build the Android 10 versions for the ABIs used by consumers. | Validate the local kernel UAPI and linker dependencies; do not mix vendor/platform variants by filename. |
+| Audio | ARM64 framework can initially use the existing binderized audio/effects 5.0 service with ARM32 vendor dependencies. | A20s has lib64 primary audio and ACDB/calibration libraries; check codec, amplifier, mixer paths, calibration and proprietary Samsung effects before selecting them. |
+| Wi-Fi/Bluetooth | Retain functioning stock hardware services; compile suitable Android 10 source components where feasible. | A20s has lib64 Wi-Fi/BT candidates, but chip/transport, driver commands, firmware and configuration must match A6+. |
+| GNSS | Keep the stock binderized GNSS path for initial migration. | A20s lists a 2.1 QTI service plus libloc/libgps/libgnss, while the A6+ standard manifest declares 1.0. Verify complete service/QMI dependencies and exported interfaces; filenames are insufficient. |
+| Lights/vibrator/power/memtrack/health | Consider small ARM64 source HALs backed by verified A6+ kernel interfaces; retain existing services until implemented. | A20s health 2.1 and Samsung vibrator 2.2 differ from current standard contracts. Preserve brightness, battery charging/thermal behavior and suspend control. |
+| DRM | Build Android 10 ClearKey from source; keep A6+ Widevine/OEMCrypto and secure-world integration in their working process ABI. | A20s DRM 1.3 and OEMCrypto are not validated against A6+ keys/trustlets/secure buffers. A generic donor copy does not establish DRM operation or security level. |
+
+These are independent migration tasks. Prioritize graphics and platform runtime, then media; replacing
+every binderized HAL before the first ARM64 framework build is not necessary. Core libraries such as
+libc, libdl, libhidlbase and libbinder come from the Android 10 build, not wholesale from the Android 11
+vendor. No additional hardware-service transplant has been enabled by this inventory.
+
 ## Implementation order
 
 1. Confirm the stock firmware origin of a donor and assemble a coherent graphics package for both
