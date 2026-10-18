@@ -1,5 +1,25 @@
 # LineageOS 17.1 device tree — Samsung Galaxy A6+ (SM-A605FN, `a6plte`)
 
+## Current `pe-ten` branch (2026-10-18)
+
+This branch builds Pixel Experience 10 with a 32-bit userspace and an ARM64 kernel.
+`kernel-profile.mk` selects a matching defconfig and toolchain from the kernel source Makefile:
+
+| Sources | Defconfig | Compiler |
+|---|---|---|
+| 4.9 (`a6plte-4.9`) | `a6plte_bringup_defconfig` | clang-r353983d, GCC binutils |
+| 3.18 (`lineage-17.1`) | `a6plte_sea_open_defconfig` | GCC 4.9, `KCFLAGS=-mno-android` |
+
+Missing configs and other kernel versions stop the build configuration. Selecting a profile does not validate boot.
+The project's `scripts/pixel-update-trees.sh --check` checks committed source/destination repositories without
+updating them. Run without `--check` to align the trees; `KERNEL_BRANCH=lineage-17.1` selects the 3.18 fallback.
+The updater refuses dirty repositories, unexpected origins/branches, unpublished local commits and an active Soong
+build lock. Save reviewed changes as commits before using it: uncommitted working-tree edits are never copied.
+It preserves the other kernel branch and switches config/compiler automatically on the next configuration pass.
+Do not run `repo sync` or edit the trees concurrently. Multi-repository updates are not atomic against power loss.
+
+The initial Lineage bring-up notes below are historical; the current ROM builds boot, system and vendor.
+
 SDM450 (`msm8953`), 2.8 GB RAM, 1080x2220 AMOLED, kernel 3.18.124 arm64 with a **32-bit only userspace**.
 
 ## Strategy (Treble, system-only first)

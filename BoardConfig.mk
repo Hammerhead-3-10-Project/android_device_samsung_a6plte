@@ -11,18 +11,13 @@ DEVICE_PATH := device/samsung/a6plte
 
 include device/samsung/msm8953-common/BoardConfigCommon.mk
 
-# Kernel 4.9.319 built from source (kernel/samsung/a6plte, branch a6plte-4.9 of the local repo): the ifoodplayer
-# sdm450 tree plus the A6+ board port (dts, SM5708 battery, sec_ts touch, TFA9872 audio, sensors, ...).
+# Kernel built from source; select a matching config/toolchain for the checked-out sources.
 # arm64 kernel, 32-bit userspace (TARGET_ARCH := arm) with a 64-bit binder.
-# The 4.9 tree needs clang (r353983d, same as the manual builds); the linker is the gcc 4.9 binutils ld, picked
-# through the cross compile prefix, because ld.lld fails on the empty built-in.o archives.
 BOARD_MKBOOTIMG_ARGS += --board SRPQL20D008KU
 TARGET_KERNEL_SOURCE := kernel/samsung/a6plte
-TARGET_KERNEL_CONFIG := a6plte_bringup_defconfig
 TARGET_KERNEL_ARCH := arm64
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_CLANG_VERSION := r353983d
+include $(DEVICE_PATH)/kernel-profile.mk
 # Fallback: the stock 3.18 Image.gz-dtb with ",verify" removed from the dtbs (uncomment and drop the lines above)
 # TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 
