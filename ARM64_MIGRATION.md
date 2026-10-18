@@ -62,6 +62,24 @@ not establish that contract or guarantee removal of KGSL compatibility patches o
 Do not transplant donor thermal configuration, power limits or modem/TEE firmware as part of the
 architecture migration. Keep A6+ thermal control until a separately justified change is tested.
 
+## A20s Android 11 follow-up (2026-10-18)
+
+The user explicitly includes Android 11 donors. A20s is an active candidate: a different Android
+release alone neither rejects a blob nor proves it will run. The vendor repository now tracks
+`donors/a20s-gpu.json` and its fetcher, selecting 26 GPU/compiler files across both ABIs. Files are
+still isolated on the SSD; the current vendor image and product architecture are unchanged.
+
+The initial audit expanded to 51 downloaded files (49 ELF, two thermal text files), with 2,651
+explicit versioned platform imports checked. The GPU subset's 1,730 imports all occur in the Android 10
+ARM/ARM64 libc/libdl/libm/liblog export maps. Unversioned dependencies and runtime loading remain open.
+A20s reference kernel e8bedc92132230962d4bbaca3af56fdaf67a2a80 has the same KGSL UAPI header as the
+local 4.9 kernel; implementation/firmware compatibility still requires validation.
+
+Keep EGL/GLES/Vulkan/GSL consistent: old A6+ GLES/Vulkan import gsl_shared_memory_import, absent from
+A20s GSL. Display/metadata, mapper, codecs, perf and thermal have separate dependencies/contracts and
+are not selected by the GPU manifest. See vendor `donors/README.md` for the detailed findings,
+including the SDM LIBC_R map mismatch and why an export-map mismatch alone is not a complete linker test.
+
 ## Implementation order
 
 1. Confirm the stock firmware origin of a donor and assemble a coherent graphics package for both
