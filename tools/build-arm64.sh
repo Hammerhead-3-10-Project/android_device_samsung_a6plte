@@ -10,7 +10,7 @@ if [[ "$output_dir" = out || "$output_dir" = /* || "$output_dir" = *..* ]]; then
     exit 1
 fi
 mounts=()
-for component in device_samsung_a6plte device_samsung_msm8953-common vendor_samsung_a6plte; do
+for component in device_samsung_a6plte device_samsung_msm8953-common vendor_samsung_a6plte hardware_qcom_display_msm8996 hardware_interfaces; do
     component_tree="$port_work/$component"
     [[ "$(git -C "$component_tree" branch --show-current)" = pe-ten-arm64 ]] || {
         echo "Expected pe-ten-arm64 worktree: $component_tree" >&2; exit 1;
@@ -19,6 +19,8 @@ for component in device_samsung_a6plte device_samsung_msm8953-common vendor_sams
         device_samsung_a6plte) target_path=device/samsung/a6plte ;;
         device_samsung_msm8953-common) target_path=device/samsung/msm8953-common ;;
         vendor_samsung_a6plte) target_path=vendor/samsung/a6plte ;;
+        hardware_qcom_display_msm8996) target_path=hardware/qcom-caf/msm8996/display ;;
+        hardware_interfaces) target_path=hardware/interfaces ;;
     esac
     mounts+=(-v "$component_tree:/src/$target_path:ro")
     common_git_dir="$(git -C "$component_tree" rev-parse --path-format=absolute --git-common-dir)"
