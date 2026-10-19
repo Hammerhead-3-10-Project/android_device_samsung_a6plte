@@ -35,7 +35,7 @@ mkdir -p "$source_tree/$output_dir"
 [[ $# -gt 0 ]] || set -- nothing
 exec podman run --rm --userns=keep-id --hostname a6plte-arm64-builder \
     -e HOME=/tmp -e LC_ALL=C -e BUILD_HOSTNAME=a6plte-arm64-builder -e BUILD_NUMBER=arm64-dev \
-    -e OUT_DIR="$output_dir" -e ALLOW_MISSING_DEPENDENCIES=true \
+    -e A6PLTE_ANALYSIS -e OUT_DIR="$output_dir" -e ALLOW_MISSING_DEPENDENCIES=true \
     -v "$source_tree:/src:Z" -v "$port_work:$port_work:ro" \
     "${mounts[@]}" -w /src lineage17-builder bash -c '
         set +e; source build/envsetup.sh >/dev/null; set -e

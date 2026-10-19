@@ -25,7 +25,9 @@ include $(DEVICE_PATH)/kernel-profile.mk
 TARGET_OTA_ASSERT_DEVICE := a6plte
 
 # The vendor partition is built from the files of vendor/samsung/a6plte (stock vendor of A605FNXXU8CVA1)
+ifndef A6PLTE_ANALYSIS
 include vendor/samsung/a6plte/BoardConfigVendor.mk
+endif
 
 # Partitions (A605FN PIT)
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
