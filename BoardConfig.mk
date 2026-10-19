@@ -53,5 +53,3 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/recovery.fstab
 # SELinux
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
-# The stock vendor is Android 10: its manifest and policy are sepolicy 29.0
-BOARD_SEPOLICY_VERS := 29.0
