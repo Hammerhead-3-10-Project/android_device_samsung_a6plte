@@ -31,6 +31,13 @@ kernel_tree="${KERNEL_TREE:-/run/media/fenixdev/sorgenti/kernel-49}"
 mounts+=(-v "$kernel_tree:/src/kernel/samsung/a6plte:ro")
 kernel_git="$(git -C "$kernel_tree" rev-parse --path-format=absolute --git-common-dir)"
 mounts+=(-v "$kernel_git:$kernel_git:ro")
+# PE passes a relative O= to the kernel header step unless OUT_DIR is exactly "out", and make
+# runs inside the (read-only) kernel dir. A symlink to the container's out dir makes it work.
+if [[ ! -L "$kernel_tree/$output_dir" ]]; then
+    rm -rf "$kernel_tree/$output_dir"
+    ln -s "/src/$output_dir" "$kernel_tree/$output_dir"
+fi
+grep -qx "/$output_dir" "$kernel_git/info/exclude" 2>/dev/null || { mkdir -p "$kernel_git/info"; echo "/$output_dir" >> "$kernel_git/info/exclude"; }
 mkdir -p "$source_tree/$output_dir"
 [[ $# -gt 0 ]] || set -- nothing
 exec podman run --rm --userns=keep-id --hostname a6plte-arm64-builder \
@@ -43,6 +50,8 @@ exec podman run --rm --userns=keep-id --hostname a6plte-arm64-builder \
         if [[ "$1" = --config ]]; then
             build/soong/soong_ui.bash --dumpvars-mode --vars="TARGET_ARCH TARGET_ARCH_VARIANT TARGET_CPU_ABI TARGET_2ND_ARCH TARGET_2ND_CPU_ABI TARGET_KERNEL_CONFIG TARGET_KERNEL_CLANG_VERSION TARGET_GAPPS_ARCH PRODUCT_OUT PRODUCT_DEFAULT_PROPERTY_OVERRIDES"
             get_build_var PRODUCT_PACKAGES | tr " " "\n" | sed -n "/SetupWizard/p"
+        elif [[ "$1" = --packages ]]; then
+            get_build_var PRODUCT_PACKAGES | tr " " "\n" | sort -u
         elif [[ "$1" = --elf-checks ]]; then
             m a6plte-arm64-elf-checks a6plte-runtime-policy -j8
         else
