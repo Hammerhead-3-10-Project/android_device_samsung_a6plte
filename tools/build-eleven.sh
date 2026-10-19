@@ -2,7 +2,7 @@
 # Build/inspect experimental ARM64 trees with a separate output directory.
 # Default target is "nothing" (configuration only); full ROM builds are user-run.
 set -euo pipefail
-source_tree="${PIXEL_TREE:-/run/media/fenixdev/sorgenti/pixel10}"
+source_tree="${PIXEL_TREE:-/run/media/fenixdev/sorgenti/pixel11}"
 port_work="${ARM64_WORK:-/run/media/fenixdev/sorgenti/arm64-port}"
 output_dir="${ARM64_OUT_DIR:-out-arm64}"
 if [[ "$output_dir" = out || "$output_dir" = /* || "$output_dir" = *..* ]]; then
@@ -10,22 +10,26 @@ if [[ "$output_dir" = out || "$output_dir" = /* || "$output_dir" = *..* ]]; then
     exit 1
 fi
 mounts=()
-for component in device_samsung_a6plte device_samsung_msm8953-common vendor_samsung_a6plte hardware_qcom_display_msm8996 hardware_interfaces; do
-    component_tree="$port_work/$component"
-    [[ "$(git -C "$component_tree" branch --show-current)" = pe-ten-arm64 ]] || {
-        echo "Expected pe-ten-arm64 worktree: $component_tree" >&2; exit 1;
+for component in device_samsung_a6plte device_samsung_msm8953-common vendor_samsung_a6plte; do
+    component_tree="$port_work/eleven_$component"
+    [[ "$(git -C "$component_tree" branch --show-current)" = pe-eleven ]] || {
+        echo "Expected pe-eleven worktree: $component_tree" >&2; exit 1;
     }
     case "$component" in
         device_samsung_a6plte) target_path=device/samsung/a6plte ;;
         device_samsung_msm8953-common) target_path=device/samsung/msm8953-common ;;
         vendor_samsung_a6plte) target_path=vendor/samsung/a6plte ;;
-        hardware_qcom_display_msm8996) target_path=hardware/qcom-caf/msm8996/display ;;
-        hardware_interfaces) target_path=hardware/interfaces ;;
     esac
     mounts+=(-v "$component_tree:/src/$target_path:ro")
     common_git_dir="$(git -C "$component_tree" rev-parse --path-format=absolute --git-common-dir)"
     mounts+=(-v "$common_git_dir:$common_git_dir:ro")
 done
+# Kernel 4.9 (a6plte-4.9 worktree), built by the ROM with the clang of the PE tree.
+kernel_tree="${KERNEL_TREE:-/run/media/fenixdev/sorgenti/kernel-49}"
+[[ "$(git -C "$kernel_tree" branch --show-current)" = a6plte-4.9 ]] || { echo "Expected a6plte-4.9 in $kernel_tree" >&2; exit 1; }
+mounts+=(-v "$kernel_tree:/src/kernel/samsung/a6plte:ro")
+kernel_git="$(git -C "$kernel_tree" rev-parse --path-format=absolute --git-common-dir)"
+mounts+=(-v "$kernel_git:$kernel_git:ro")
 mkdir -p "$source_tree/$output_dir"
 [[ $# -gt 0 ]] || set -- nothing
 exec podman run --rm --userns=keep-id --hostname a6plte-arm64-builder \
