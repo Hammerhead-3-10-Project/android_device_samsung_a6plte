@@ -27,6 +27,10 @@ endif
 # Common Samsung msm8953 configuration (Treble, hardware/samsung, proprietary system libs)
 $(call inherit-product, device/samsung/msm8953-common/msm8953.mk)
 
+# Samsung NFC stack configuration (the vendor HAL config alone is insufficient).
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/libnfc-nci.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf
+
 # ARM64-only additions, tracked independently of the regenerated stock vendor.
 ifndef A6PLTE_ANALYSIS
 $(call inherit-product, vendor/samsung/a6plte/arm64/arm64-vendor.mk)
